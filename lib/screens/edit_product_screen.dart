@@ -18,7 +18,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
   final _imageUrlController = TextEditingController();
   final _form = GlobalKey<FormState>();
   var _editedProduct = Product(
-    id: '',
+    id: null,
     title: '',
     description: '',
     price: 0,
@@ -43,10 +43,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      final productId = ModalRoute.of(context)!.settings.arguments as String;
+      final productId = ModalRoute.of(context)!.settings.arguments;
       if (productId != null) {
         _editedProduct = Provider.of<ProductsProvider>(context, listen: false)
-            .findById(productId);
+            .findById(productId as String);
         _initValues = {
           'title': _editedProduct.title,
           'description': _editedProduct.description,
@@ -86,10 +86,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
     _form.currentState!.save();
     if (_editedProduct.id != null) {
       Provider.of<ProductsProvider>(context, listen: false)
-          .updateProduct(_editedProduct.id, _editedProduct);
+          .updateProduct(_editedProduct.id as String, _editedProduct);
+      print('Update Product');
     } else {
       Provider.of<ProductsProvider>(context, listen: false)
           .addProduct(_editedProduct);
+      print('Added Product');
     }
 
     Navigator.of(context).pop();
@@ -153,7 +155,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   },
                 ),
                 TextFormField(
-                  initialValue: _initValues['price'] as String,
+                  initialValue: _initValues['price'].toString(),
                   decoration: const InputDecoration(
                     labelText: 'Price',
                     labelStyle: TextStyle(

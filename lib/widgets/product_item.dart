@@ -36,10 +36,10 @@ class ProductItem extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           trailing: IconButton(
-            icon: Icon(Icons.shopping_cart),
+            icon: const Icon(Icons.shopping_cart),
             onPressed: () {
               cart.addItem(
-                product.id,
+                product.id as String,
                 product.price,
                 product.title,
               );
@@ -53,7 +53,7 @@ class ProductItem extends StatelessWidget {
                   action: SnackBarAction(
                     label: 'UNDO',
                     onPressed: () {
-                      cart.removeSingleItem(product.id);
+                      cart.removeSingleItem(product.id as String);
                     },
                   ),
                 ),

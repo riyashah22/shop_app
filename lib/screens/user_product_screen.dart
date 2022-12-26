@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:shop_app/providers/products_provider.dart';
 import 'package:shop_app/screens/edit_product_screen.dart';
 import 'package:shop_app/widgets/app_drawer.dart';
-import 'package:shop_app/widgets/product_grid.dart';
 import 'package:shop_app/widgets/user_product_item.dart';
 
 class UserProductScreen extends StatelessWidget {
@@ -25,19 +24,19 @@ class UserProductScreen extends StatelessWidget {
           ),
         ],
       ),
-      drawer: AppDrawer(),
+      drawer: const AppDrawer(),
       body: Padding(
-        padding: EdgeInsets.all(8),
+        padding: const EdgeInsets.all(8),
         child: ListView.builder(
           itemCount: productsData.items.length,
           itemBuilder: (_, i) => Column(
             children: [
               UserProductItem(
-                productsData.items[i].id,
+                productsData.items[i].id as String,
                 productsData.items[i].title,
                 productsData.items[i].imageUrl,
               ),
-              Divider(),
+              const Divider(),
             ],
           ),
         ),
