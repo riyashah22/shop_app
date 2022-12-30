@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:shop_app/models/http_exception.dart';
 import 'package:shop_app/providers/product.dart';
 import 'package:http/http.dart' as http;
 
@@ -73,6 +74,9 @@ class ProductsProvider with ChangeNotifier {
       final response = await http.get(url);
       // here map is dynamic to show nested map
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
+      if (extractedData == <String, dynamic>{}) {
+        return;
+      }
       final List<Product> loadedProducts = [];
       extractedData.forEach((prodId, prodData) {
         loadedProducts.add(Product(
@@ -87,7 +91,7 @@ class ProductsProvider with ChangeNotifier {
       _items = loadedProducts;
       notifyListeners();
     } catch (error) {
-      throw error;
+      rethrow;
     }
   }
 
@@ -150,7 +154,10 @@ class ProductsProvider with ChangeNotifier {
     _items.removeAt(existingProductIndex);
     notifyListeners();
     http.delete(url).then((response) {
-      if (response.statusCode >= 400) existingProduct = null;
+      if (response.statusCode >= 400) {
+        throw HttpException('Could not delete product.');
+      }
+      existingProduct = null;
     }).catchError((_) {
       _items.insert(existingProductIndex, existingProduct!);
       notifyListeners();
